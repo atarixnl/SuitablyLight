@@ -1,6 +1,5 @@
 module.exports = {
-	darkMode: ['attribute', 'class', 'data-color'],
-
+	darkMode: ['attribute', 'data-theme'],
 	content: ['./src/**/*.{js,ts,jsx,tsx}', './index.html'],
 	theme: {
 		extend: {},

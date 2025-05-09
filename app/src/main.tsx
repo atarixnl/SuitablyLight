@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import boltUxpLogo from './assets/bolt-uxp.png';
 import viteLogo from './assets/vite.png';
@@ -15,11 +15,6 @@ export const App = () => {
 	const helloWorld = () => api.notify('Hello World');
 
 	const hostName = (uxp.host.name as string).toLowerCase();
-	const theme = uxp?.host?.theme?.toLowerCase?.() ?? 'light';
-
-	useEffect(() => {
-		document.documentElement.setAttribute('data-theme', theme);
-	}, [theme]);
 
 	return (
 		<>
