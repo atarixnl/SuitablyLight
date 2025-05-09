@@ -1,34 +1,84 @@
 import { useState } from 'react';
+import photoshop from 'photoshop';
 
-export function useTheme() {
-	const [theme, setTheme] = useState<string | null>(null);
+type ThemeBrightness = 'darkest' | 'dark' | 'light' | 'lightest' | '';
+
+type UIColorKey =
+	| 'kPanelBrightnessDarkGray'
+	| 'kPanelBrightnessMediumGray'
+	| 'kPanelBrightnessLightGray'
+	| 'kPanelBrightnessOriginal';
+
+/**
+ * batchPlay detects brightness change and
+ * returns theme brightness.
+ * @returns {UIColorKey}
+ */
+export const getTheme = async () => {
+	const result = await photoshop.action.batchPlay(
+		[
+			{
+				_obj: 'get',
+				_target: [
+					{ _property: 'kuiBrightnessLevel' },
+					{ _ref: 'application', _enum: 'ordinal', _value: 'targetEnum' },
+				],
+				_options: { dialogOptions: 'dontDisplay' },
+			},
+		],
+		{ synchronousExecution: true }
+	);
+
+	const pinned = result[0].kuiBrightnessLevel._value;
+
+	return pinned;
+};
+
+/**
+ * register event
+ * @param setTheme
+ */
+export const photoshopUiEvent = async (setTheme: any) => {
+	// console.log('🔊 Adding Theme Switch Listener');
+	photoshop.action.addNotificationListener(['modalStateChanged'], async (event, descriptor) => {
+		console.log('🔊 Event:', event);
+		setTheme(await getTheme());
+	});
+};
+
+/**
+ * switch from UIColorKey to ThemeBrightness
+ * @param {UIColorKey} key
+ * @returns {ThemeBrightness}
+ */
+const setThemeColor = (key: UIColorKey): ThemeBrightness => {
+	switch (key) {
+		case 'kPanelBrightnessDarkGray':
+			return 'darkest';
+
+		case 'kPanelBrightnessMediumGray':
+			return 'dark';
+
+		case 'kPanelBrightnessLightGray':
+			return 'light';
+
+		case 'kPanelBrightnessOriginal':
+			return 'lightest';
+	}
+};
+
+/**
+ * custom hook
+ * @returns {theme, setTheme}
+ */
+export const useTheme = () => {
+	//console.log('useTheme');
+	const [theme, setTheme] = useState<ThemeBrightness>('');
+	const setColor = (key: UIColorKey) => {
+		setTheme(setThemeColor(key));
+	};
 	return {
 		theme,
-		setColor: setTheme,
+		setColor,
 	};
-}
-
-export async function getTheme(): Promise<string> {
-	const hostTheme = (window as any)?.uxp?.host?.theme?.toLowerCase?.();
-	switch (hostTheme) {
-		case 'dark':
-		case 'darkest':
-			return 'dark';
-		case 'light':
-		case 'lightest':
-			return 'light';
-		default:
-			return 'light';
-	}
-}
-
-export function photoshopUiEvent(setTheme: (value: string) => void) {
-	try {
-		const app = (window as any).require?.('photoshop')?.app;
-		app?.addEventListener?.('uxpThemeColorChanged', async () => {
-			setTheme(await getTheme());
-		});
-	} catch (err) {
-		console.warn('Photoshop theme event unavailable', err);
-	}
-}
+};
