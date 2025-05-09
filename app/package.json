@@ -23,24 +23,30 @@
     "win-build": "msbuild src/hybrid/win/bolt-uxp-hybrid.sln"
   },
   "dependencies": {
+    "@spectrum-web-components/theme": "^1.6.0",
+    "@swc-react/theme": "^1.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "npm-run-all": "^4.1.5",
-    "@vitejs/plugin-react": "^4.2.1",
     "@adobe/cc-ext-uxp-types": "https://github.com/justintaylor-dev/cc-ext-uxp-types.git",
+    "@tailwindcss/postcss": "^4.1.5",
     "@types/node": "^20.8.7",
     "@types/photoshop": "^25.0.2",
-    "@types/ws": "^8.5.8",
-    "cross-env": "^7.0.3",
-    "sass": "^1.69.5",
-    "typescript": "^5.0.2",
-    "vite": "^5.1.1",
-    "ws": "^8.14.2",
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",
+    "@types/ws": "^8.5.8",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.21",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
-    "vite-uxp-plugin": "^0.2.5"
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.5.3",
+    "sass": "^1.69.5",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.0.2",
+    "vite": "^5.1.1",
+    "vite-uxp-plugin": "^0.2.5",
+    "ws": "^8.14.2"
   }
 }
